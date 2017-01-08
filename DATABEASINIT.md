@@ -9,7 +9,7 @@ CREATE TABLE users (
     password VARCHAR(20) NOT NULL,
     createtime INT,
     PRIMARY KEY ( id )
-);
+)DEFAULT CHARSET=utf8;
 INSERT INTO users (username, password, createtime) VALUES('root', '1234qwer!', 1483804445);
 
 ## 课程
@@ -19,7 +19,7 @@ CREATE TABLE lessons (
     day INT NOT NULL,
     section INT NOT NULL,
     PRIMARY KEY (lessonname, teachername)
-);
+)DEFAULT CHARSET=utf8;
 
 ## 用户-课程
 CREATE TABLE u2l (
@@ -29,4 +29,4 @@ CREATE TABLE u2l (
     PRIMARY KEY ( username, lessonname ),
     FOREIGN KEY ( username ) REFERENCES users ( username ),
     FOREIGN KEY ( lessonname ) REFERENCES lessons ( lessonname )
-);
+)DEFAULT CHARSET=utf8; 

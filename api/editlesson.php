@@ -1,7 +1,7 @@
 <?php
     session_start();
     if($_SESSION["user_name"]=="" || $_SESSION["user_pw"]==""){
-        echo "<script language=javascript>alert('请先登陆!');location.href='login.php';</script>";
+        echo "<script language=javascript>alert('请先登陆!');location.href='/login.php';</script>";
         exit;
     }
      $lessonname=$_POST["lessonname"];
@@ -20,11 +20,11 @@
              $dbh->beginTransaction();
              $sth = $dbh->query("INSERT INTO lessons(teachername, lessonname, day, section) VALUES('$teachername', '$lessonname', $day, $section);");
              $dbh->commit();
-             echo "<script language=javascript>alert('新建成功');location.href='manage.php';</script>";
+             echo "<script language=javascript>alert('新建成功');location.href='/manage.php';</script>";
              exit;
          }
          else{
-             echo "<script language=javascript>alert('教师课程重复');location.href='manage.php';</script>";
+             echo "<script language=javascript>alert('教师课程重复');location.href='/manage.php';</script>";
          }
 
      } catch (Exception $e) {

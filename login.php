@@ -20,15 +20,16 @@ if($username!=""){
           session_start();
           $_SESSION["user_name"]=$username;
           $_SESSION["user_pw"]=$password;
-          echo "<script language=javascript>alert('登陆成功!');location.href='manage.php';</script>";
+          echo "<script language=javascript>alert('登陆成功!');location.href='/manage.php';</script>";
           exit;
      }
  }
 ?>
 <HTML>
 <HEAD>
-<TITLE>登陆   </TITLE>
-<link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.0/css/bootstrap.min.css">
+    <title>iBlog</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.0/css/bootstrap.min.css">
 
 </HEAD>
 <BODY>
@@ -40,7 +41,7 @@ if($username!=""){
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="#">iBlog</a>
+          <a class="navbar-brand" href="/">iBlog</a>
         </div>
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
           <ul class="nav navbar-nav">
@@ -52,11 +53,11 @@ if($username!=""){
                 session_start();
                 if($_SESSION["user_name"]!="" && $_SESSION["user_pw"]!=""){
                     echo "<li><a href=\"#\">".$_SESSION["user_name"]."</a></li>";
-                    echo "<li><a href=\"manage.php\">管理个人信息</a></li>";
-                    echo "<li><a href=\"logout.php\">登出</a></li>";
+                    echo "<li><a href=\"/manage.php\">管理个人信息</a></li>";
+                    echo "<li><a href=\"/api/logout.php\">登出</a></li>";
                 }
                 else {
-                    echo "<li><a href=\"login.php\">登陆</a></li>";
+                    echo "<li><a href=\"/login.php\">登陆</a></li>";
                 }
                ?>
           </ul>
@@ -65,7 +66,7 @@ if($username!=""){
     </nav>
 
 <div class="container">
-    <form class="form-horizontal" role="form" action="login.php" method="post">
+    <form class="form-horizontal" role="form" action="/login.php" method="post">
       <div class="form-group">
         <label for="inputEmail3" class="col-md-offset-2 col-md-2 control-label">用户名</label>
         <div class="col-sm-4">
