@@ -1,6 +1,6 @@
 <?php
     session_start();
-    if($_SESSION["user_name"]=="" || $_SESSION["user_pw"]==""){
+    if($_SESSION["user_name"]==""){
         echo "<script language=javascript>alert('请先登陆!');location.href='/login.php';</script>";
         exit;
     }

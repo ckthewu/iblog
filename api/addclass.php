@@ -1,7 +1,7 @@
 <?php
     session_start();
-    if($_SESSION["user_name"]=="" || $_SESSION["user_pw"]==""){
-        echo "请先登陆!";
+    if($_SESSION["user_name"]==""){
+        echo "<script language=javascript>alert('请先登陆!');location.href='/login.php';</script>";
         exit;
     }
      $lessonname=$_POST["lessonname"];
@@ -10,9 +10,23 @@
          $dbh = new PDO('mysql:host=localhost;dbname=iblog;port=3306','root','7777777');
          $dbh->query('set names utf8;');
          $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-         $touch = $dbh->query("SELECT * FROM u2l WHERE username = '$username' AND lessonname = '$lessonname'");
-         $count = $touch->fetchAll();
-         if (count($count)<1){
+         $touchl = $dbh->query("SELECT * FROM lessons WHERE lessonname = '$lessonname';");
+         $lessonetime = $touchl->fetchAll();
+         if (count($lessonetime)<1){
+             echo "无此课程";
+             exit;
+         }
+         $touchu2l = $dbh->query("SELECT * FROM u2l WHERE username = '$username' AND lessonname = '$lessonname';");
+         $haslesson = $touchu2l->fetchAll();
+         if (count($haslesson)<1){
+             $touchsametime = $dbh->query("SELECT u.lessonname, l.day, l.section FROM u2l u, lessons l WHERE u.username = '$username' AND u.lessonname=l.lessonname;");
+             $sametime = $touchsametime->fetchAll();
+             foreach($sametime as $value){
+                 if($value["day"] == $lessonetime[0]["day"] && $value["section"] == $lessonetime[0]["section"]){
+                     echo "与 ".$value["lessonname"]." 时间冲突";
+                     exit;
+                 }
+             }
              $dbh->beginTransaction();
              $sth = $dbh->query("INSERT INTO u2l( username, lessonname ) VALUES('$username', '$lessonname');");
              $dbh->commit();

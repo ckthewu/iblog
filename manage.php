@@ -1,6 +1,6 @@
 <?php
     session_start();
-    if($_SESSION["user_name"]=="" || $_SESSION["user_pw"]==""){
+    if($_SESSION["user_name"]=="" || $_SESSION["user_uptime"]==""){
         echo "<script language=javascript>alert('请先登陆!');location.href='/login.php';</script>";
         exit;
     }
@@ -10,51 +10,15 @@
     <head>
         <title>iBlog</title>
         <meta charset="UTF-8">
-        <link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.0/css/bootstrap.min.css">
-        <style>
-            .tab-container{
-                padding: 20px;
-                border: 1px solid #ddd;
-                border-top: 0px;
-            }
-        </style>
+        <link rel="stylesheet" href="/static/css/bootstrap.min.css">
+        <link rel="stylesheet" href="/static/css/iblog.css">
     </head>
     <body>
-        <nav class="navbar navbar-default" role="navigation">
-          <div class="container-fluid">
-            <div class="navbar-header">
-              <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-              </button>
-              <a class="navbar-brand" href="/">iBlog</a>
-            </div>
-            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-              <ul class="nav navbar-nav">
-                <li><a href="/lessons.php">课程表</a></li>
-                <li><a href="/transcripts.php">成绩单</a></li>
-              </ul>
-              <ul class="nav navbar-nav navbar-right">
-                  <?php
-                    if($_SESSION["user_name"]!="" && $_SESSION["user_pw"]!=""){
-                        echo "<li><a href=\"#\">".$_SESSION["user_name"]."</a></li>";
-                        echo "<li><a href=\"/manage.php\">管理个人信息</a></li>";
-                        echo "<li><a href=\"/api/logout.php\">登出</a></li>";
-                    }
-                    else {
-                        echo "<li><a href=\"/login.php\">登陆</a></li>";
-                    }
-                   ?>
-              </ul>
-            </div>
-          </div>
-        </nav>
-
+        <?php include "navbar.php" ?>
         <div class="header-content">
             <div class="container">
                 <div class="header-content-title">
-                    <h1 class="text-center">欢迎使用iBlog Manage</h1>
+                    <h1 class="text-center" id="title"><?php echo $_SESSION["user_name"]."个人管理" ?></h1>
                 </div>
             </div>
         </div>
@@ -66,15 +30,30 @@
                       <li role="presentation" id="transcript"><a href="#">成绩录入</a></li>
                       <li role="presentation" id="lessons"><a href="#">新建课程</a></li>
                       <li role="presentation" id="photo"><a href="#">上传图片</a></li>
-                      <li role="presentation" id="users"><a href="#">注册账号</a></li>
+                      <li role="presentation" id="newusers"><a href="#">注册账号</a></li>
                     </ul>
                 </div>
-                <div class="mian-content">
+                <div class="mian-content"  id="data">
                     <div id="u2l-form" class="tab-container">
-                        <table class="table table-striped ">
-                          <thead><tr><th>课程名</th><th>任课教师</th><th>星期</th><th>节次</th><th>选课</th><th>退课</th></tr></thead>
-                          <tbody></tbody>
-                        </table>
+                        <div>
+                            <table class="table table-striped">
+                              <thead><tr><th>课程名</th><th>任课教师</th><th>星期</th><th>节次</th><th>选退课</th></tr></thead>
+                              <tbody>
+                                  <tr><th colspan="5" class="text-center">已选课程</th></tr>
+                                  <tr v-for="(lesson, index) in havelessons">
+                                      <td>{{ lesson.lessonname }}</td><td>{{ lesson.teachername }}</td>
+                                      <td>{{ lesson.day }}</td><td>{{ 2*lesson.section-1 }}-{{ 2*lesson.section }}</td>
+                                      <td><button v-on:click="deleteclass(lesson.lessonname)" type="button" class="btn btn-default deletebutton" id=("delete"+index)>删课</button></td>
+                                  </tr>
+                                  <tr><th colspan="5" class="text-center">未选课程</th></tr>
+                                  <tr v-for="(lesson, index) in otherlessons">
+                                      <td>{{ lesson.lessonname }}</td><td>{{ lesson.teachername }}</td>
+                                      <td>{{ lesson.day }}</td><td>{{ 2*lesson.section-1 }}-{{ 2*lesson.section }}</td>
+                                      <td><button v-on:click="addclass(lesson.lessonname)" type="button" class="btn btn-default addbutton" id=("add"+index)>选课</button></td>
+                                  </tr>
+                              </tbody>
+                            </table>
+                        </div>
                     </div>
                     <div id="lessons-form" class="tab-container">
                         <div class="row">
@@ -106,15 +85,11 @@
                                     </div>
                                   <div class="col-md-2">
                                       <select class="form-control" name="lessontime-section">
-                                          <option value="1">第1节</option>
-                                          <option value="2">第2节</option>
-                                          <option value="3">第3节</option>
-                                          <option value="4">第4节</option>
-                                          <option value="5">第5节</option>
-                                          <option value="6">第6节</option>
-                                          <option value="7">第7节</option>
-                                          <option value="8">第8节</option>
-                                          <option value="9">第9节</option>
+                                          <option value="1">第1-2节</option>
+                                          <option value="2">第3-4节</option>
+                                          <option value="3">第5-6节</option>
+                                          <option value="4">第7-8节</option>
+                                          <option value="5">第9-10节</option>
                                       </select>
                                   </div>
                               </div>
@@ -132,7 +107,9 @@
                               <div class="form-group">
                                 <label for="" class="col-md-offset-2 col-md-2 control-label">课程名</label>
                                 <div class="col-md-4">
-                                  <input type="text" class="form-control" placeholder="" name="lessonname">
+                                  <select class="form-control" name="lessonname">
+                                      <option v-for="lesson in havelessons" v-bind:value="lesson.lessonname">{{ lesson.lessonname }}</option>
+                                  </select>
                                 </div>
                               </div>
                               <div class="form-group">
@@ -166,7 +143,7 @@
                             </form>
                         </div>
                     </div>
-                    <div id="users-form" class="tab-container">
+                    <div id="newusers-form" class="tab-container">
                         <div class="row">
                             <form class="form-horizontal" role="form" action="/api/register.php" method="post">
                               <div class="form-group">
@@ -198,59 +175,10 @@
                 </div>
             </div>
         </div>
-        <script src="http://cdn.bootcss.com/jquery/1.11.1/jquery.min.js"></script>
-        <script src="http://cdn.bootcss.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+        <?php include "script.php" ?>
         <script>
-            <?php
-                try{
-                    $dbh = new PDO('mysql:host=localhost;dbname=iblog;port=3306','root','7777777');
-                    $dbh->query('set names utf8;');
-                    $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-                    $class_chosen = $dbh->query("SELECT * FROM lessons");
-                    $classtable = $class_chosen->fetchAll();
-                    echo "var classtable = ".json_encode($classtable).";";
-                } catch (Exception $e) {
-                    echo "Failed: " . $e->getMessage();
-                }
-            ?>
-         console.log(classtable);
-         $(classtable).each(function(i){
-             $("#u2l-form table tbody").append("<tr><td>"+
-             classtable[i].lessonname+"</td><td>"+classtable[i].teachername+
-             "</td><td>"+classtable[i].day+"</td><td>"+classtable[i].section+
-             '</td><td><button type="button" class="btn btn-default" id="add'+i+
-             '">选课</button></td><td><button type="button" class="btn btn-default" id="delete'+i+
-             '">删课</button></td></tr>');
-             $("#delete"+i).click(function(){
-                 $.post('/api/deleteclass.php',
-                     {
-                         lessonname: classtable[i].lessonname
-                     },
-                     function(ret){
-                         alert(ret);
-                     }
-                 );
-             });
-             $("#add"+i).click(function(){
-                 $.post('/api/addclass.php',
-                     {
-                         lessonname: classtable[i].lessonname
-                     },
-                     function(ret){
-                         alert(ret);
-                     }
-                 );
-             });
-         });
-         $("#tab li").click(function(){
-             $(this).siblings().attr('class','');
-             $(this).attr('class', 'active');
-             $(".tab-container").hide();
-             $("#"+$(this).attr('id')+"-form").show();
-         });
          $(document).ready(function(){
-             $(".tab-container").hide();
-             $("#u2l-form").show();
+             manageInit();
          });
         </script>
     </body>

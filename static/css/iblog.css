@@ -1,0 +1,22 @@
+.tab-container{
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-top: 0px;
+}
+#main{
+    position: relative;
+}
+.box{
+    padding: 5px;
+    float: left;
+}
+.imgdata{
+    padding: 5px;
+    border: 1px solid grey;
+    box-shadow: 0 0 5px grey;
+    border-radius: 5px;
+}
+.imgdata img{
+    width: 200px;
+    height: auto;
+}
