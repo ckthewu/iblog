@@ -1,4 +1,5 @@
 <?php
+    //获取用户图片地址 图片名格式为用户名-原图片名
    $username = $_GET["username"];
    $pagehomeaddr = '/home/ckthewu/phpproject/iBlog';
    $src = '/media/usersmedia';

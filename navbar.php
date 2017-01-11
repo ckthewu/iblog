@@ -23,7 +23,7 @@
       <ul class="nav navbar-nav navbar-right">
           <?php
             session_start();
-            if($_SESSION["user_name"]!="" && $_SESSION["user_uptime"]!=""){
+            if($_SESSION["user_name"]!=""){
                 echo "<li><a href=\"#\" id=\"manageuser\">".$_SESSION["user_name"]."</a></li>";
                 echo "<li id=\"li-manage\"><a href=\"/manage.php\">管理个人信息</a></li>";
                 echo "<li><a href=\"/api/logout.php\">登出</a></li>";

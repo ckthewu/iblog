@@ -18,7 +18,7 @@
         <div class="header-content">
             <div class="container">
                 <div class="header-content-title">
-                    <h1 class="text-center" id="title"><?php echo $_SESSION["user_name"]."个人管理" ?></h1>
+                    <h1 class="text-center" id="title"><?php  echo $_SESSION["user_name"]."个人管理"; ?></h1>
                 </div>
             </div>
         </div>

@@ -22,7 +22,6 @@
                         <th>星期六</th><th>星期日</th>
                     </tr></thead>
                     <tbody id="data">
-                         <!-- <lesson-tr v-for="data in datalist" v-bind:lesson="data[0]"></lesson-tr> -->
                          <tr v-for="(data, index) in datalist">
                              <th>{{ 2*index+1 }}-{{ 2*index+2 }}</th>
                              <td>{{ data[0] }}</td><td>{{ data[1] }}</td>

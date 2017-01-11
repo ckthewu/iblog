@@ -12,11 +12,10 @@
          $dbh = new PDO('mysql:host=localhost;dbname=iblog;port=3306','root','7777777');
          $dbh->query('set names utf8;');
          $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
+         //判断能否添加该课
          $touch = $dbh->query("SELECT * FROM lessons WHERE teachername = '$teachername' AND lessonname = '$lessonname'");
          $count = $touch->fetchAll();
          if (count($count)<1){
-
              $dbh->beginTransaction();
              $sth = $dbh->query("INSERT INTO lessons(teachername, lessonname, day, section) VALUES('$teachername', '$lessonname', $day, $section);");
              $dbh->commit();

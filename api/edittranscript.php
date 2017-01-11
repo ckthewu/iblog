@@ -11,7 +11,7 @@
          $dbh = new PDO('mysql:host=localhost;dbname=iblog;port=3306','root','7777777');
          $dbh->query('set names utf8;');
          $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
+         //判断是否已选该课
          $touch = $dbh->query("SELECT * FROM u2l WHERE username = '$username' AND lessonname = '$lessonname'");
          $count = $touch->fetchAll();
          if (count($count)<1){

@@ -11,10 +11,12 @@ if($username!=""){
      $sth->execute();
      $result = $sth->fetchAll();
      if(count($result)<1){
-         echo "<script language=javascript>alert('该用户不存在!请重新登陆!');</script>";
+         echo "<script language=javascript>alert('该用户不存在!请重新登陆!');location.href='/login.php';</script>";
+         exit;
      }
      if($result[0]['password']!=$password){
-         echo "<script language=javascript>alert('密码输入错误!请重新登陆!');</script>";
+         echo "<script language=javascript>alert('密码输入错误!请重新登陆!');location.href='/login.php';</script>";
+         exit;
      }else{
           session_start();
           $_SESSION["user_name"]=$username;

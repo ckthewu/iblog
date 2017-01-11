@@ -19,6 +19,7 @@
              }
              $touch = $dbh->query("SELECT * FROM u2l WHERE username = '$username' AND lessonname = '$lessonname';");
              $count = $touch->fetchAll();
+             //判断是否已选
              if (count($count)>0){
                  $dbh->beginTransaction();
                  $sth = $dbh->query("DELETE FROM u2l WHERE username = '$username' AND lessonname = '$lessonname';");

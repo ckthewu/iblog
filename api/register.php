@@ -11,13 +11,12 @@
          exit;
      }
      $username=$_POST["username"];
-
          $dbh = new PDO('mysql:host=localhost;dbname=iblog;port=3306','root','7777777');
          $dbh->query('set names utf8;');
          $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
          $touch = $dbh->query("SELECT * FROM users WHERE username = '$username';");
          $count = $touch->fetchAll();
+         //判断用户名是否重复
          if (count($count)>0){
              echo "<script language=javascript>alert('用户名已注册');location.href='/manage.php';</script>";
              exit;
