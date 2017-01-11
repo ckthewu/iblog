@@ -35,9 +35,7 @@
                 <li>
                     <h2 ><span class="strong">项目地址</span></h2>
                     <hr />
-                    <p><span class="big">时间：</span>2013/9-2017/7</p>
-                    <p><span class="big">学校：</span>北京邮电大学</p>
-                    <p><span class="big">专业：</span>通信工程 本科</p>
+                    <p><span class="big">github:</span><a href="https://github.com/ckthewu/iblog">https://github.com/ckthewu/iblog</a></p>
                 </li>
             </ul>
             </div>
